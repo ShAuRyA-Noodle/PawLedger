@@ -1,26 +1,121 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Type */
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-instrument-serif), Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* Brand palette (OKLCH) */
+  --color-ink: oklch(20% 0.04 240);
+  --color-cream: oklch(97% 0.02 80);
+  --color-marigold: oklch(78% 0.16 70);
+  --color-marigold-deep: oklch(64% 0.18 60);
+  --color-sage: oklch(72% 0.10 145);
+  --color-slate: oklch(45% 0.02 240);
+  --color-coral: oklch(70% 0.18 25);
+  --color-charcoal: oklch(22% 0.01 0);
+  --color-line: oklch(90% 0.01 80);
+  --color-line-strong: oklch(82% 0.02 80);
+
+  /* Semantic */
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-ink);
+  --color-muted: oklch(50% 0.02 240);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: var(--color-ink);
+  --color-primary: var(--color-marigold-deep);
+  --color-primary-foreground: oklch(98% 0.01 80);
+  --color-success: var(--color-sage);
+  --color-danger: var(--color-coral);
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-soft: 0 1px 2px oklch(0% 0 0 / 0.04), 0 4px 16px oklch(0% 0 0 / 0.04);
+  --shadow-floating: 0 8px 24px oklch(0% 0 0 / 0.08);
+  --shadow-deep: 0 16px 48px oklch(0% 0 0 / 0.12);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Dark mode (manual class-based, optional toggle in v1) */
+.dark {
+  --color-background: var(--color-charcoal);
+  --color-foreground: oklch(95% 0.01 80);
+  --color-card: oklch(28% 0.02 240);
+  --color-line: oklch(38% 0.02 240);
+  --color-muted: oklch(70% 0.02 240);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv02", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-marigold);
+  color: var(--color-ink);
+}
+
+/* Custom focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-marigold-deep);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Scrollbar (subtle) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-line-strong); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-slate); }
+
+/* Skip-to-content for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  padding: 12px 20px;
+  z-index: 100;
+  border-bottom-right-radius: 8px;
+  transition: top 0.2s;
 }
+.skip-link:focus { top: 0; }
+
+/* Marquee for the live ledger ticker */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  display: flex;
+  gap: 2rem;
+  white-space: nowrap;
+  animation: marquee 50s linear infinite;
+}
+.marquee:hover { animation-play-state: paused; }
