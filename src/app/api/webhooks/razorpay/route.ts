@@ -13,7 +13,10 @@ export async function POST(req: NextRequest) {
   }
 
   const event = JSON.parse(raw) as { event: string; payload: Record<string, { entity: Record<string, unknown> }> };
-  console.log("[razorpay] received event:", event.event);
+  // Defang webhook-supplied strings before they hit the structured log;
+  // attacker-controlled CR/LF would otherwise forge fresh log lines.
+  const sanitize = (v: unknown) => String(v ?? "").replace(/[\r\n\t]/g, " ").slice(0, 120);
+  console.log("[razorpay] received event:", sanitize(event.event));
 
   try {
     switch (event.event) {
@@ -33,7 +36,7 @@ export async function POST(req: NextRequest) {
           shelterId = a[0]?.shelterId ?? null;
         }
         if (!shelterId) {
-          console.error("[razorpay] cannot resolve shelter for payment", payment.id);
+          console.error("[razorpay] cannot resolve shelter for payment", sanitize(payment.id));
           break;
         }
 
