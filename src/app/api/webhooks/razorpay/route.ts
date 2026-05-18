@@ -13,10 +13,21 @@ export async function POST(req: NextRequest) {
   }
 
   const event = JSON.parse(raw) as { event: string; payload: Record<string, { entity: Record<string, unknown> }> };
-  // Defang webhook-supplied strings before they hit the structured log;
-  // attacker-controlled CR/LF would otherwise forge fresh log lines.
-  const sanitize = (v: unknown) => String(v ?? "").replace(/[\r\n\t]/g, " ").slice(0, 120);
-  console.log("[razorpay] received event:", sanitize(event.event));
+  // Map the webhook-supplied event name through an explicit allowlist before
+  // logging; falls back to "unknown" so an attacker can never plant arbitrary
+  // bytes (including CR/LF for log forging) into our log stream.
+  const KNOWN_EVENTS = new Set([
+    "payment.captured",
+    "payment.failed",
+    "subscription.charged",
+    "subscription.activated",
+    "subscription.cancelled",
+    "subscription.completed",
+    "refund.created",
+    "refund.processed",
+  ]);
+  const safeEventName = KNOWN_EVENTS.has(event.event) ? event.event : "unknown";
+  console.log("[razorpay] received event:", safeEventName);
 
   try {
     switch (event.event) {
@@ -36,7 +47,12 @@ export async function POST(req: NextRequest) {
           shelterId = a[0]?.shelterId ?? null;
         }
         if (!shelterId) {
-          console.error("[razorpay] cannot resolve shelter for payment", sanitize(payment.id));
+          // Log only a stable digest of payment.id; the raw value is webhook-
+          // controlled and could otherwise carry log-forging bytes.
+          const idDigest = typeof payment.id === "string"
+            ? payment.id.replace(/[^A-Za-z0-9_.\-]/g, "").slice(0, 64)
+            : "non-string";
+          console.error("[razorpay] cannot resolve shelter for payment", idDigest);
           break;
         }
 
