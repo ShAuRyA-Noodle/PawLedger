@@ -11,13 +11,13 @@ Built with Next.js 16, TypeScript, Tailwind 4, Drizzle ORM, Better Auth, Razorpa
 
 ```bash
 pnpm install
-cp .env.example .env       # fill in values (see docs/LAUNCH_CHECKLIST.md)
+cp .env.example .env       # fill in real values (see docs/LAUNCH_CHECKLIST.md)
 pnpm db:push               # apply schema to Postgres
 pnpm db:seed               # populate demo data (12 shelters, 60 animals, 250 donations)
 pnpm dev                   # http://localhost:3000
 ```
 
-Demo admin: `admin@pawledger.org` (use magic link in dev — link prints to console if RESEND_API_KEY isn't set).
+Demo admin: `admin@pawledger.org` (use the magic link in dev; the link prints to the console if `RESEND_API_KEY` isn't set).
 
 ---
 
@@ -104,8 +104,8 @@ pawledger/
 - **Name**: PawLedger (trademark check pending)
 - **Tagline**: "Compassion you can prove."
 - **Pricing**: 4% platform fee + payment processing pass-through
-- **Tier ladder (INR)**: ₹100 / ₹300 / ₹500 / ₹1,000 — default ₹300
-- **Tier ladder (USD)**: $5 / $25 / $50 — default $25
+- **Tier ladder (INR)**: ₹100 / ₹300 / ₹500 / ₹1,000 (default ₹300)
+- **Tier ladder (USD)**: $5 / $25 / $50 (default $25)
 - **Legal model**: For-profit Pvt Ltd platform routing donations to partner Section 8 NGOs (GoFundMe / Givebutter pattern). Shelters issue 80G; we don't.
 - **Geographic scope**: India primary, US secondary. No FCRA at launch.
 - **Trust wedge**: SHA-256 hash-chained per-shelter ledger, append-only, publicly verifiable.
@@ -114,7 +114,17 @@ pawledger/
 
 ## Brutal honesty up-top
 
-This codebase ships a world-class technical product. It does **not** ship $200–300k MRR — that comes from execution + capital + time. See [`docs/LAUNCH_CHECKLIST.md`](./docs/LAUNCH_CHECKLIST.md) §7 for what code can and cannot do.
+This codebase ships a strong technical product. It does **not** ship revenue; that comes from execution, capital, and time. See [`docs/LAUNCH_CHECKLIST.md`](./docs/LAUNCH_CHECKLIST.md) §7 for what code can and cannot do.
+
+---
+
+## Security
+
+- **Secrets** live only in `.env` (gitignored). Copy `.env.example`, fill in real values, and never commit them. Server-only keys (Stripe, Razorpay, webhook secrets, `BETTER_AUTH_SECRET`, `DATABASE_URL`) are never exposed to the client; only `NEXT_PUBLIC_*` values reach the browser.
+- **Webhooks** verify provider signatures against the raw request body before any ledger or database write, and fail closed if the webhook secret is unset.
+- **Receipts** (donor PII and shelter tax IDs) are private: `GET /api/receipts/[id]` requires the owning donor or a platform admin. Public verification at `/transparency/receipts/[number]` shows only the non-sensitive ledger record.
+- **Automated scanning** is on: CodeQL (`security-extended`), secret scanning with push protection, and Dependabot security updates.
+- **Disclosure**: report vulnerabilities privately per [`SECURITY.md`](./SECURITY.md).
 
 ---
 
