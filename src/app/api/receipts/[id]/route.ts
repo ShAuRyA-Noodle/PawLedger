@@ -24,13 +24,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: "Receipt not available" }, { status: 404 });
   }
 
-  // Auth: donor can fetch their own; admin can fetch any; otherwise email-match
-  if (session?.user) {
-    if (row.donation.donorId && row.donation.donorId !== session.user.id) {
-      const userRow = await db.select({ role: schema.user.role }).from(schema.user).where(eq(schema.user.id, session.user.id)).limit(1);
-      if (userRow[0]?.role !== "platform_admin") {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-      }
+  // Auth: a receipt PDF exposes donor PII (name, email) and shelter tax IDs
+  // (PAN / 80G / 12A), so it must never be served anonymously. Only the
+  // owning donor or a platform admin may fetch it. Guest donations
+  // (donorId === null) are therefore admin-only.
+  if (!session?.user) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+  const isOwner = row.donation.donorId != null && row.donation.donorId === session.user.id;
+  if (!isOwner) {
+    const userRow = await db.select({ role: schema.user.role }).from(schema.user).where(eq(schema.user.id, session.user.id)).limit(1);
+    if (userRow[0]?.role !== "platform_admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
   }
 

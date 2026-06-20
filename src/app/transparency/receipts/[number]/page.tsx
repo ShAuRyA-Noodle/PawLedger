@@ -89,7 +89,7 @@ export default async function ReceiptVerifyPage({ params }: { params: Promise<{ 
         </div>
       </Card>
 
-      <Link href={`/api/receipts/${donation.id}`} className="mt-6 inline-block text-sm text-marigold-deep hover:underline">Download PDF receipt →</Link>
+      <p className="mt-6 text-sm text-slate">The official PDF receipt (with donor and tax details) is private. Sign in to your <Link href="/dashboard" className="text-marigold-deep hover:underline">donor dashboard</Link> to download it.</p>
     </div>
   );
 }
