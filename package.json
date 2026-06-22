@@ -35,7 +35,7 @@
     "maplibre-gl": "^5.24.0",
     "meilisearch": "^0.58.0",
     "nanoid": "^5.1.11",
-    "next": "16.2.6",
+    "next": "16.2.9",
     "next-intl": "^4.11.1",
     "pdf-lib": "^1.17.1",
     "pino": "^10.3.1",
