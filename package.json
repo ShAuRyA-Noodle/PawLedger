@@ -2,6 +2,7 @@
   "name": "pawledger",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -24,7 +25,7 @@
     "@upstash/qstash": "^2.10.1",
     "@upstash/redis": "^1.38.0",
     "bcryptjs": "^3.0.3",
-    "better-auth": "^1.6.11",
+    "better-auth": "1.6.22",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -32,11 +33,11 @@
     "drizzle-orm": "^0.45.2",
     "jose": "^6.2.3",
     "lucide-react": "^1.14.0",
-    "maplibre-gl": "^5.24.0",
+    "maplibre-gl": "6.4.1",
     "meilisearch": "^0.58.0",
-    "nanoid": "^5.1.11",
-    "next": "16.2.6",
-    "next-intl": "^4.11.1",
+    "nanoid": "^5.1.16",
+    "next": "16.3.6",
+    "next-intl": "^4.14.7",
     "pdf-lib": "^1.17.1",
     "pino": "^10.3.1",
     "postgres": "^3.4.9",
@@ -48,12 +49,12 @@
     "react-dom": "19.2.4",
     "react-map-gl": "^8.1.1",
     "resend": "^6.12.3",
-    "stripe": "^22.1.1",
+    "stripe": "^22.6.2",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/bcryptjs": "^3.0.0",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
@@ -62,19 +63,8 @@
     "@types/react-dom": "^19",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.3.3",
     "tsx": "^4.22.4",
     "typescript": "^5"
-  },
-  "pnpm": {
-    "overrides": {
-      "esbuild": "^0.25.0",
-      "postcss": "^8.5.10",
-      "vite": "^6.4.2",
-      "form-data": "^4.0.6",
-      "protobufjs": "^7.6.3",
-      "dompurify": "^3.4.11",
-      "@opentelemetry/core": "^2.8.0"
-    }
   }
 }

@@ -1,3 +1,21 @@
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
+overrides:
+  esbuild: ^0.25.0
+  postcss: ^8.5.18
+  vite: ^6.4.2
+  form-data: ^4.0.6
+  protobufjs: ^7.6.3
+  dompurify: ^3.4.13
+  fflate: ^0.4.9
+  baseline-browser-mapping: ^2.11.0
+  '@opentelemetry/core': ^2.8.0
+  axios: ^1.18.0
+  sharp: ^0.35.4
+  'nanoid@^3.0.0': ^3.3.18
+
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  core-js: false
+  esbuild: true
+  sharp: false
+  unrs-resolver: false
