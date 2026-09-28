@@ -44,7 +44,7 @@
     "posthog-js": "^1.391.2",
     "posthog-node": "^5.38.2",
     "qrcode": "^1.5.4",
-    "razorpay": "^2.9.6",
+    "razorpay": "^2.9.8",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "react-map-gl": "^8.1.1",
