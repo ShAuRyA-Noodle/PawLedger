@@ -25,7 +25,7 @@
     "@upstash/qstash": "^2.10.1",
     "@upstash/redis": "^1.38.0",
     "bcryptjs": "^3.0.3",
-    "better-auth": "1.6.22",
+    "better-auth": "1.7.7",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
